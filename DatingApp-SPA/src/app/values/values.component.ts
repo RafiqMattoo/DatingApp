@@ -15,9 +15,9 @@ values: any;
     this.getvalues();
   }
   getvalues(){
-    this.http.get('https://localhost:5001/api/values').subscribe(response => {
-this.values = response;
- 
+    debugger;
+    this.http.get('https://localhost:44393/api/valuescd..').subscribe(response => {
+this.values = response; 
 console.log('Hello From Angular');
 },
 error => { console.log('error in component');

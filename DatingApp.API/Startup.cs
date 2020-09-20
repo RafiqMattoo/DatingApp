@@ -27,21 +27,37 @@ namespace DatingApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddCors(options =>
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+
+            //services.AddCors(options =>
+            //{
+            //    options.AddDefaultPolicy(builder =>
+            //        builder.SetIsOriginAllowed(_ => true)
+            //        .AllowAnyMethod()
+            //        .AllowAnyHeader()
+            //        .AllowCredentials());
+            //});
+
+            //services.AddCors();
+                
+             services.AddCors(options =>
+             
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
+               options.AddPolicy("CorsPolicy",
+                   builder => builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader()
+                   .AllowCredentials());
             });
             services.AddScoped <IAuthRepository, AuthRepository>();
+            services.AddMvc(option => option.EnableEndpointRouting = false);
+             
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors("CorsPolicy");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -50,13 +66,18 @@ namespace DatingApp.API
             {
                 app.UseHsts();
             }
+            app.UseMvc(); 
+
 
             app.UseHttpsRedirection();
-            app.UseMvc();
-            app.UseCors(x=> x.AllowAnyOrigin().AllowAnyMethod());
-            
+             app.UseRouting();
 
-
+            // app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Values}/{action=Index}/{id?}");
+            //});
         }
     }
 }

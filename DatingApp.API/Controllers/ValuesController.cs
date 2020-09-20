@@ -12,6 +12,7 @@ namespace DatingApp.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("CorsPolicy")]
+
     public class ValuesController : ControllerBase
     {
         private DataContext _context;
